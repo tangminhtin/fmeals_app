@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import '../dummy_data.dart';
+import '../models/meal.dart';
 
 class MealDetailScreen extends StatelessWidget {
   static const routeName = '/meal-detail';
+  final List<Meal> availableMeals;
+
+  MealDetailScreen(this.availableMeals);
 
   @override
   Widget build(BuildContext context) {
     final mealId = ModalRoute.of(context)?.settings.arguments as String;
-    final selectMeal = DUMMY_MEALS.firstWhere((meal) => meal.id == mealId);
+    final selectMeal = availableMeals.firstWhere((meal) => meal.id == mealId);
 
     Widget buildSectionTitle(BuildContext context, String text) {
       return Container(
@@ -103,6 +106,15 @@ class MealDetailScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.delete,
+          color: Theme.of(context).primaryColor,
+        ),
+        onPressed: () {
+          Navigator.of(context).pop(mealId);
+        },
       ),
     );
   }
