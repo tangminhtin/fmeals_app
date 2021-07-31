@@ -3,9 +3,16 @@ import '../models/meal.dart';
 
 class MealDetailScreen extends StatelessWidget {
   static const routeName = '/meal-detail';
-  final List<Meal> availableMeals;
 
-  MealDetailScreen(this.availableMeals);
+  final List<Meal> availableMeals;
+  final Function toggleFavorites;
+  final Function isMealFavorite;
+
+  MealDetailScreen(
+    this.availableMeals,
+    this.toggleFavorites,
+    this.isMealFavorite,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -107,14 +114,38 @@ class MealDetailScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.delete,
-          color: Theme.of(context).primaryColor,
-        ),
-        onPressed: () {
-          Navigator.of(context).pop(mealId);
-        },
+      floatingActionButton: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  child: Icon(
+                    isMealFavorite(mealId)
+                        ? Icons.star
+                        : Icons.star_border_outlined,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () => toggleFavorites(mealId),
+                  heroTag: null,
+                ),
+                SizedBox(width: 10),
+                FloatingActionButton(
+                  child: Icon(
+                    Icons.delete,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop(mealId);
+                  },
+                  heroTag: null,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
